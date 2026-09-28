@@ -32,7 +32,7 @@ function App() {
         },
         {
             name: 'Yahoo!オークション',
-            url: 'https://auctions.yahoo.co.jp/opensearch?p=<key></key>&fixed=0&auccat=22192&mode=3',
+            url: 'https://auctions.yahoo.co.jp/opensearch?p=<key>&fixed=0&auccat=22192&mode=3',
         },
         {
             name: 'メルカリ',
