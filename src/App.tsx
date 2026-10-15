@@ -4,6 +4,9 @@ import styles from './App.module.css';
 type Site = {
     name: string;
     url: string;
+    option?: {
+        delimiter?: string;
+    };
 };
 
 function App() {
@@ -15,24 +18,47 @@ function App() {
             url: 'https://shopping.bookoff.co.jp/search/genre/31/keyword/<key>?per-page=120&sort=50',
         },
         {
-            name: '楽天市場',
-            url: 'https://search.rakuten.co.jp/search/mall/<key>/101311/?s=11',
+            name: 'ニッポンシザイ.com',
+            url: 'https://nipponshizai.co.jp/search?q=<key>&options%5Bprefix%5D=last&filter.v.price.gte=&filter.v.price.lte=&sort_by=price-ascending',
+            option: {
+                delimiter: '+',
+            },
         },
         {
-            name: 'まんだらけ通販',
-            url: 'https://order.mandarake.co.jp/order/listPage/list?soldOut=1&sort=price&sortOrder=0&categoryCode=0401&keyword=<key>',
+            name: '楽天市場',
+            url: 'https://search.rakuten.co.jp/search/mall/<key>/101311/?s=11',
+            option: {
+                delimiter: '+',
+            },
+        },
+        {
+            name: 'Yahoo!ショッピング',
+            url: 'https://shopping.yahoo.co.jp/search/<key>/0/?tab_ex=commerce&X=12&sc_i=shopping-pc-web-result-item-sort_mdl-sortitem',
+            option: {
+                delimiter: '+',
+            },
         },
         {
             name: '駿河屋',
             url: 'https://www.suruga-ya.jp/search?category=&search_word=<key>&adult_s=2&rankBy=price%3Aascending',
         },
         {
-            name: 'ニッポンシザイ.com',
-            url: 'https://nipponshizai.co.jp/search?q=<key>&options%5Bprefix%5D=last&filter.v.price.gte=&filter.v.price.lte=&sort_by=price-ascending',
+            name: 'まんだらけ通販',
+            url: 'https://order.mandarake.co.jp/order/listPage/list?soldOut=1&sort=price&sortOrder=0&categoryCode=0401&keyword=<key>',
+        },
+        {
+            name: 'HMV',
+            url: 'https://www.hmv.co.jp/used/search/?sort=priceasc&chkcategory=ctgryUsed&fmtcd=on&fmtsingle=on&keyword=<key>',
+            option: {
+                delimiter: '+',
+            },
         },
         {
             name: 'Yahoo!オークション',
             url: 'https://auctions.yahoo.co.jp/opensearch?p=<key>&fixed=0&auccat=22192&mode=3&select=31',
+            option: {
+                delimiter: '+',
+            },
         },
         {
             name: 'メルカリ',
@@ -41,15 +67,24 @@ function App() {
         {
             name: 'ラクマ',
             url: 'https://fril.jp/s?order=asc&query=<key>&sort=sell_price',
+            option: {
+                delimiter: '+',
+            },
         },
     ];
 
     function searchByKeyword(index: number) {
-        const keyword = inputRef.current?.value;
+        let keyword = inputRef.current?.value;
         if (keyword === undefined || keyword === '') {
             return;
         }
-        window.open(sites[index].url.replace('<key>', keyword));
+        const site = sites[index];
+        if (site.option !== undefined) {
+            if (site.option.delimiter !== undefined) {
+                keyword = keyword.replaceAll(/\s/g, site.option.delimiter);
+            }
+        }
+        window.open(site.url.replace('<key>', keyword));
     }
 
     return (
