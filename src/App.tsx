@@ -32,6 +32,13 @@ function App() {
             },
         },
         {
+            name: 'ネットオフ',
+            url: 'https://www.netoff.co.jp/cmdtyallsearch/?display-amount=100&cat=3001&sort=cheap&word=<key>&dnum=100',
+            option: {
+                delimiter: '+',
+            },
+        },
+        {
             name: 'Yahoo!ショッピング',
             url: 'https://shopping.yahoo.co.jp/search/<key>/0/?tab_ex=commerce&X=12&sc_i=shopping-pc-web-result-item-sort_mdl-sortitem',
             option: {
