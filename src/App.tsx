@@ -1,11 +1,13 @@
 import { useRef } from 'react';
 import styles from './App.module.css';
+import Encoding from 'encoding-japanese';
 
 type Site = {
     name: string;
     url: string;
     option?: {
         delimiter?: string;
+        encoding?: 'sjis';
     };
 };
 
@@ -58,6 +60,7 @@ function App() {
             url: 'https://www.hmv.co.jp/used/search/?sort=priceasc&chkcategory=ctgryUsed&fmtcd=on&fmtsingle=on&keyword=<key>',
             option: {
                 delimiter: '+',
+                encoding: 'sjis',
             },
         },
         {
@@ -87,8 +90,21 @@ function App() {
         }
         const site = sites[index];
         if (site.option !== undefined) {
+            if (site.option.encoding !== undefined) {
+                keyword = keyword
+                    .split(/\s/g)
+                    .map((text) => {
+                        const unicodeArray = Encoding.stringToCode(text);
+                        const sjisArray = Encoding.convert(unicodeArray, {
+                            to: 'SJIS',
+                            from: 'UNICODE',
+                        });
+                        return Encoding.urlEncode(sjisArray);
+                    })
+                    .join(' ');
+            }
             if (site.option.delimiter !== undefined) {
-                keyword = keyword.replaceAll(/\s/g, site.option.delimiter);
+                keyword = keyword.replaceAll(/[\s]/g, site.option.delimiter);
             }
         }
         window.open(site.url.replace('<key>', keyword));
